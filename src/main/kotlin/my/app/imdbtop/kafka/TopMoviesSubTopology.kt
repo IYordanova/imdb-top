@@ -47,7 +47,7 @@ class TopMoviesSubTopology(
                     .withName("ratings-and-title-basics-join")
                     .withStoreName("ratings-and-title-basics-join-store")
             )
-            .groupBy({ _, v -> v.titleId }, Grouped.with(Serdes.String(), titleWithRatingsSerde()))
+            .groupByKey(Grouped.with(Serdes.String(), titleWithRatingsSerde()))
             .aggregate(
                 { AggregatedMovies() },
                 { _, titleWithRatings, aggregate -> calculateTop10(aggregate, titleWithRatings) },

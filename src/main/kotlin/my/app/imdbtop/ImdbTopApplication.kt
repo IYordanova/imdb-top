@@ -21,6 +21,7 @@ class ImdbTopApplication (
 	@PostConstruct
 	fun startStream(){
 		streams = KafkaStreams(topology, kafkaStreamsProperties)
+		streams.start()
 	}
 
 	@PreDestroy

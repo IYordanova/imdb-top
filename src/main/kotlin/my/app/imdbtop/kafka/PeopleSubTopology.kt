@@ -61,10 +61,6 @@ class PeopleSubTopology(
                 Materialized.with(Serdes.String(), aggregatedPrincipalsSerde())
             )
             .toStream()
-//            .process(getProcessorSupplier())
-//            .groupByKey(Grouped.with(Serdes.String(), aggregatedPrincipalsSerde()))
-//            .reduce { _, value2 -> value2 }
-//            .toStream()
             .peek { _, v -> logger.info("Principal with Names: $v") }
             .to(principalsNamesPerMovieTopic)
 
@@ -79,35 +75,5 @@ class PeopleSubTopology(
             kafkaTopicsProperties.getTopic(DataSetType.PRINCIPALS).name,
             Consumed.with(Serdes.String(), principalSerde())
         ).map { _, v -> KeyValue(v.nameId, v) }
-
-//    private fun getProcessorSupplier() =
-//        object : ProcessorSupplier<String, AggregatedPrincipals, String, AggregatedPrincipals> {
-//            val STORE_NAME = "PeopleStore"
-//            val storeBuilder = Stores.keyValueStoreBuilder(
-//                Stores.persistentKeyValueStore(STORE_NAME),
-//                Serdes.String(),
-//                aggregatedPrincipalsSerde()
-//            ).withCachingEnabled()
-//
-//            override fun get() = object : Processor<String, AggregatedPrincipals, String, AggregatedPrincipals> {
-//                private lateinit var context: ProcessorContext<String, AggregatedPrincipals>
-//                private lateinit var store: KeyValueStore<String, AggregatedPrincipals>
-//
-//                override fun init(context: ProcessorContext<String, AggregatedPrincipals>) {
-//                    super.init(context)
-//                    this.context = context
-//                    this.store = context.getStateStore(STORE_NAME)
-//                }
-//
-//                override fun process(record: Record<String, AggregatedPrincipals>) {
-//                    val principals = store.get(record.key())
-//                    if (principals == null) {
-//
-//                    }
-//                }
-//            }
-//
-//            override fun stores() = setOf(storeBuilder)
-//        }
 
 }
