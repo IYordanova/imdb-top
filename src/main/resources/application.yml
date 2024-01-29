@@ -1,0 +1,47 @@
+spring:
+  profiles:
+    active: ${SPRING_PROFILE}
+  application:
+    name: imdb.top
+  main:
+    banner-mode: off
+
+logging:
+  level:
+    my: INFO
+
+kafka:
+  inputTopics:
+    -
+      name: title.crew
+      dataSetType: CREW
+    -
+      name: title.episode
+      dataSetType: EPISODE
+    -
+      name: name.basics
+      dataSetType: NAME_BASICS
+    -
+      name: title.principals
+      dataSetType: PRINCIPALS
+    -
+      name: title.ratings
+      dataSetType: RATINGS
+    -
+      name: title.akas
+      dataSetType: TITLE
+    -
+      name: title.basics
+      dataSetType: TITLE_BASICS
+  outputTopics:
+    top10.rated.movies.with.people: top10.rated.movies.with.people
+    top10.rated.movies: top10.rated.movies
+    principals.names.per.movie: principals.names.per.movie
+  streams:
+    application.id: ${spring.application}
+    auto.offset.reset: latest
+    bootstrap.servers: localhost:9092
+
+rating-rules:
+  time-window-mins: 5
+  min-num-votes: 500
